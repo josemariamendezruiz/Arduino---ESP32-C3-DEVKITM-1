@@ -1,0 +1,66 @@
+/*
+    CONETAR EL LCD 2004 POR BUS I2C
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    MARZO 2025
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+ 
+
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+String frase;                  // Para la frase que queremos mostrar en el lcd
+int linea ;                    // Para la linea donde vamos a escribir
+int columna ;                  // Para la columna de la linea donde vamos a escribir
+int total_lineas = 4;          // Para indicar cuantas lineas tiene nuestro lcd
+int total_columnas = 20;       // Para indicar cuantas columnas tiene nuestro lcd
+#define I2C_SDA 2
+#define I2C_SCL 3
+
+LiquidCrystal_I2C lcd_i2c(0x27, total_columnas, total_lineas); // indicamos cuantos caracteres y lineas tiene nuestro lcd
+
+void setup() {
+  
+  Wire.begin(I2C_SDA, I2C_SCL);
+
+  // initialize the LCD
+  lcd_i2c.begin();
+  lcd_i2c.backlight();
+
+  linea = 0; columna = 5;
+  frase = "Hola Mundo";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+
+  linea = 1; columna = 0;
+  frase = "Hello World";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+
+  linea = 2; columna = 1;
+  frase = "Que curioso";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+
+  linea = 3; columna = 5;
+  frase = "TecnoRebot";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+}
+
+void loop(){
+  
+}
