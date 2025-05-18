@@ -1,0 +1,55 @@
+/*
+    SENSOR DE LUZ BH1750
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    MAYO 2025
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+
+#include <Wire.h> 
+#include <BH1750.h>
+
+// DECLARAMOS LOS PINES QUE VAMOS A UTILIZAR COMO I2C
+#define I2C_SDA 2
+#define I2C_SCL 3
+
+BH1750 SENSOR_BH1750(0x23); // DECLARAMOS EL OBJETO
+
+void setup() {
+  Wire.begin(I2C_SDA, I2C_SCL);
+  Serial.begin(9600);
+
+  // BH1750::CONTINUOUS_HIGH_RES_MODE:
+  // BH1750::CONTINUOUS_HIGH_RES_MODE_2:
+  // BH1750::CONTINUOUS_LOW_RES_MODE:
+  // BH1750::ONE_TIME_HIGH_RES_MODE:
+  // BH1750::ONE_TIME_HIGH_RES_MODE_2:
+  // BH1750::ONE_TIME_LOW_RES_MODE:
+  if (SENSOR_BH1750.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+        Serial.println(F("BH1750 Sensor OK"));
+  } else {
+        Serial.println(F("Error BH1750"));
+  }
+}
+
+void loop() {
+  if (SENSOR_BH1750.measurementReady()) {
+    float lux = SENSOR_BH1750.readLightLevel();
+    Serial.print("Luz: ");
+    Serial.print(lux);
+    Serial.println(" lx");
+    delay(200); // establecemos pausa de 200 milisegundos antes de la siguiente lectura.
+  }
+}
