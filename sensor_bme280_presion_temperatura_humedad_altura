@@ -1,0 +1,65 @@
+/*
+    SENSOR BME280 REGISTRA TEMPERATURA, HUMEDAD, ALTURA Y PRESION
+    CODIGO ORIGINAL DE Adafruit
+    MODIFICADO : JOSE MARIA MENDEZ RUIZ
+    MAYO 2025
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+
+#define SEALEVELPRESSURE_HPA (1013.25)
+#define I2C_SDA 2
+#define I2C_SCL 3
+Adafruit_BME280 bme; // DECLARAMOS EL OBJETO para el sensor BME280
+
+void setup() {
+    Serial.begin(9600);
+    Wire.begin(I2C_SDA, I2C_SCL);
+    
+    if (! bme.begin(0x76, &Wire)) {
+        Serial.println("Error BME280");
+        while (1);
+    }
+   
+}
+
+
+void loop() {
+    bme.takeForcedMeasurement();
+    
+    Serial.print("Temperatura = ");
+    Serial.print(bme.readTemperature());
+    Serial.println(" *C");
+
+    Serial.print("Presión = ");
+    Serial.print(bme.readPressure() / 100.0F);
+    Serial.println(" hPa");
+
+    Serial.print("Altitud = ");
+    Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
+    Serial.println(" m");
+
+    Serial.print("Humedad = ");
+    Serial.print(bme.readHumidity());
+    Serial.println(" %");
+  
+    Serial.println();
+   
+    delay(1000); //pausa de un segundo para que haga una lectura de una vez por segundo
+   
+}
