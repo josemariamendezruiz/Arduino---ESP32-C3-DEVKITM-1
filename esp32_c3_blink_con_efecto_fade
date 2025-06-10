@@ -1,0 +1,56 @@
+/*
+    BLINK con efecto FADE ( encender y apagar un led poco a poco )
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    JUNIO  2025
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+// La resistencia para el led puede ser de 220 a 330 Ohmios 
+
+int pin_led = 4;  // debe ser un gpio que sea PWM
+int brillo = 0;   // para ir modificando la salida PWN y así iluminar más o menos el led
+int sentido = 0;  // 0 es para ir hacia arriba en iluminación      1 es para ir hacia abajo en iluminación
+
+void setup() {
+  pinMode(pin_led, OUTPUT); // declaramos el gpio como salida
+}
+
+void loop() {
+  analogWrite(pin_led, brillo); // empieza a modificar la salida PWM del gpio indicado
+
+  // Iluminación en sentido ascendente  ( modulación PWM a mas )
+  if (sentido == 0) {
+    brillo = brillo + 5;
+  }
+  
+  // Iluminación en sentido descendente  ( modulación PWM a menos )
+  if (sentido == 1) {
+    brillo = brillo - 5;
+  }
+
+  // Cuando llegue la iluminacion ( modulación PWM ) al máximo cambiará el sentido para que vaya la iluminación a menos
+  if ( brillo >= 255 ) {
+    sentido = 1;
+    delay(1000); // Esperará un segundo antes de empezar
+  }
+
+  // Cuando llegue la iluminacion ( modulación PWM ) al mínimo cambiará el sentido para que vaya la iluminación a mas
+  if ( brillo < 0 ) {
+    sentido = 0;
+    delay(1000); // Esperará un segundo antes de empezar
+  }
+
+  delay(100); // pausa para que lo haga poco a poco
+}
